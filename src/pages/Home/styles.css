@@ -1,0 +1,110 @@
+@font-face {
+  font-family: 'BriceBold';
+  src: url('../../fonts/Brice-Bold.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  background-image: url('../../assets/smooth-gray-background.jpg');
+  background-color: #efe7f7;
+  overflow: auto;
+  scroll-behavior: smooth;
+}
+
+body::-webkit-scrollbar {
+  width: 12px;
+}
+
+.Containerj::-webkit-scrollbar {
+  display: none;
+}
+
+.Container {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+}
+
+.box {
+  border: 1px solid;
+  width: 300px;
+  height: 300px;
+  border-radius: 10px;
+  margin: 20px;
+  background-color: lightgray;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.box.left,
+.box.right {
+  margin: 0 20px;
+}
+
+.box.left {
+  transform: translateY(20px) translateZ(-20px);
+  box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.2);
+  background-color: #d3aefe;
+}
+
+.box.middle {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  position: relative;
+  top: 30px;
+  transform: translateZ(0);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  background-color: #fede65;
+}
+
+.img-novalista {
+  position: absolute;
+  bottom: 25%;
+  width: 55%;
+  height: 100%;
+}
+
+.btn-novalista {
+  margin-bottom: 20px;
+  padding: 10px;
+  width: 70%;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #fff;
+  font-family: 'BriceBold', sans-serif;
+  font-size: 25px;
+}
+
+.btn-novalista:hover {
+  background-color: #e9dede;
+}
+
+.box.right {
+  transform: translateY(20px) translateZ(-20px);
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+}
+
+@media screen and (max-width: 890px) {
+  .Container {
+    display: grid;
+    margin-bottom: 30px;
+    height: 100%;
+  }
+
+  .box.middle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .img-novalista {
+    position: static;
+    width: 60%;
+    height: 100%;
+  }
+}

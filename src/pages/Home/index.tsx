@@ -16,7 +16,7 @@ function Home() {
                 <div className='box left'></div>
                 <div className='box middle'>
                     <img className="img-novalista" src={ImagenMiddle} alt="" />
-                    <button className='btn-novalista'onClick={() => navigate("/Teste")}>Nova Lista</button>
+                    <button className='btn-novalista'onClick={() => navigate("/Nova-Lista")}>Nova Lista</button>
                 </div>
                 <div className='box right'></div>
             </div>

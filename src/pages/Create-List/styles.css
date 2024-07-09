@@ -63,4 +63,7 @@
   .collapsible{
     border-radius: 0px;
   }
+  .content.active {
+    width: auto;
+  }
 }

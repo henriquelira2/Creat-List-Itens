@@ -3,6 +3,7 @@ import "./styles.css";
 
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import CollapsibleSection from '../../components/CollapsibleSection';
 
 function CreateList() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -11,67 +12,52 @@ function CreateList() {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
+  const sections = [
+    {
+      index: 1,
+      title: "PRODUTOS YPE",
+      items: [{ id: "ype1", label: "AMACIANTE YPE ACONCHEGO 2LT" }, { id: "ype2", label: "AGUA SANITARIA YPE PRO 1L" }]
+    },
+    {
+      index: 2,
+      title: "PRODUTOS URCA",
+      items: [{ id: "urca1", label: "AMACIANTE URCA BRISA DA PRIMAVERA LEVE 2L PAG" }]
+    },
+    {
+      index: 3,
+      title: "PRODUTOS MONANGE",
+      items: [{ id: "monange1", label: "COND MONANGE 325ML RESTAURA Q EU GOSTO 325ML" }]
+    },
+    {
+      index: 4,
+      title: "PRODUTOS KOLENE",
+      items: [{ id: "kolene1", label: "COND KOLENE CURVATURA MANTEIGAABACATE 300ML" }]
+    },
+    {
+      index: 5,
+      title: "PRODUTOS ELSEVE",
+      items: [{ id: "elseve1", label: "COND CAB LISOS 200ML ELSEVE" }]
+    }
+  ];
 
   return (
     <>
       <Header />
-      <div className='box-create-list'>
-
-        <div className={`type  ${activeIndex !== 1 && activeIndex !== null ? 'hidden' : ''}`}>
-          <button type="button" className={`collapsible  ${activeIndex === 1 ? 'border' : ''}`} onClick={() => handleToggle(1)}>
-            Open Collapsible1
-          </button>
-
-          <div className={`content ${activeIndex === 1 ? 'active' : ''}`}>
-            <p>Content for index1 </p>
-          </div>
-        </div>
-
-        <div className={`type  ${activeIndex !== 2 && activeIndex !== null ? 'hidden' : ''}`}>
-          <button type="button" className={`collapsible  ${activeIndex === 2 ? 'border' : ''}`} onClick={() => handleToggle(2)}>
-            Open Collapsible2
-          </button>
-
-          <div className={`content ${activeIndex === 2 ? 'active' : ''}`}>
-            <p>2</p>
-          </div>
-        </div>
-
-        <div className={`type  ${activeIndex !== 3 && activeIndex !== null ? 'hidden' : ''}`}>
-          <button type="button" className={`collapsible  ${activeIndex === 3 ? 'border' : ''}`} onClick={() => handleToggle(3)}>
-            Open Collapsible3
-          </button>
-
-          <div className={`content ${activeIndex === 3 ? 'active' : ''}`}>
-            <p>3</p>
-          </div>
-        </div>
-
-        <div className={`type  ${activeIndex !== 4 && activeIndex !== null ? 'hidden' : ''}`}>
-          <button type="button" className={`collapsible  ${activeIndex === 4 ? 'border' : ''}`} onClick={() => handleToggle(4)}>
-            Open Collapsible4
-          </button>
-
-          <div className={`content ${activeIndex === 4 ? 'active' : ''}`}>
-            <p>4</p>
-          </div>
-        </div>
-
-        <div className={`type  ${activeIndex !== 5 && activeIndex !== null ? 'hidden' : ''}`}>
-          <button type="button" className={`collapsible  ${activeIndex === 5 ? 'border' : ''}`} onClick={() => handleToggle(5)}>
-            Open Collapsible5
-          </button>
-
-          <div className={`content ${activeIndex === 5 ? 'active' : ''}`}>
-            <p>20</p>
-          </div>
-        </div>
-
-
-      </div>
+      <form className='box-create-list' action="">
+        {sections.map(section => (
+          <CollapsibleSection
+            key={section.index}
+            index={section.index}
+            activeIndex={activeIndex}
+            onToggle={handleToggle}
+            title={section.title}
+            items={section.items}
+          />
+        ))}
+      </form>
       <Footer />
     </>
-  )
+  );
 }
 
-export default CreateList
+export default CreateList;

@@ -16,28 +16,33 @@ function CreateList() {
     {
       index: 1,
       title: "PRODUTOS YPE",
-      items: [{ id: "ype1", label: "AMACIANTE YPE ACONCHEGO 2LT" }, { id: "ype2", label: "AGUA SANITARIA YPE PRO 1L" }]
+      items: [
+        { id: "ype1", label: "AMACIANTE YPE ACONCHEGO 2LT" },
+        { id: "ype2", label: "AGUA SANITARIA YPE PRO 1L" }
+      ]
     },
     {
       index: 2,
       title: "PRODUTOS URCA",
-      items: [{ id: "urca1", label: "AMACIANTE URCA BRISA DA PRIMAVERA LEVE 2L PAG" }]
+      items: [
+        { id: "urca1", label: "AMACIANTE URCA BRISA DA PRIMAVERA LEVE 2L PAG" }
+      ]
     },
     {
       index: 3,
       title: "PRODUTOS MONANGE",
-      items: [{ id: "monange1", label: "COND MONANGE 325ML RESTAURA Q EU GOSTO 325ML" }]
+      items: [
+        { id: "monange1", label: "COND MONANGE 325ML RESTAURA Q EU GOSTO 325ML" }
+      ]
     },
-    {
-      index: 4,
-      title: "PRODUTOS KOLENE",
-      items: [{ id: "kolene1", label: "COND KOLENE CURVATURA MANTEIGAABACATE 300ML" }]
-    },
+
     {
       index: 5,
       title: "PRODUTOS ELSEVE",
-      items: [{ id: "elseve1", label: "COND CAB LISOS 200ML ELSEVE" }]
-    }
+      items: [
+        { id: "elseve1", label: "COND CAB LISOS 200ML ELSEVE" }
+      ]
+    },
   ];
 
   return (

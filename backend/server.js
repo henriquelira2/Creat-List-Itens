@@ -7,9 +7,17 @@ const multer = require("multer");
 const mysql = require("mysql2");
 const fs = require("fs");
 const moment = require("moment-timezone");
+const cors = require("cors");
 
+require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 3001;
+
+app.use(
+  cors({
+    origin: "https://creat-list-itens-q1v5.vercel.app/", //
+  })
+);
 
 // Configurar o Multer para salvar o PDF em uma pasta temporária
 const upload = multer({ dest: "uploads/" });

@@ -22,7 +22,7 @@ const SaveList: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/pdf_files');
+                const response = await axios.get('https://creat-list-itens.onrender.com/pdf_files');
                 if (Array.isArray(response.data)) {
                     setPdfFiles(response.data);
                 } else {
@@ -40,7 +40,7 @@ const SaveList: React.FC = () => {
 
     const handleDownload = async (id: number) => {
         try {
-            const response = await axios.get(`http://localhost:3001/pdf_files/${id}/download`, {
+            const response = await axios.get(`https://creat-list-itens.onrender.com/pdf_files/${id}/download`, {
                 responseType: 'blob'
             });
             const url = window.URL.createObjectURL(new Blob([response.data]));

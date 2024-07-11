@@ -3,7 +3,9 @@ import './styles.css'
 import React, { useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisH, faMinus } from "@fortawesome/fontawesome-free-solid";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { faEllipsisH, faMinus } from "@fortawesome/free-solid-svg-icons";
+
 
 interface IProps {
     open?: boolean;
@@ -24,10 +26,10 @@ const Collapsible: React.FC<IProps> = ({ open, children }) => {
                 <div>
                     <div className="p-3 border-bottom d-flex justify-content-between collaps-icon">
                         <button type="button" className="btn-collaps" onClick={handleFilterOpening}>
-                            {!isOpen ? (
-                                <FontAwesomeIcon icon={faEllipsisH} className="font-icon" />
+                        {!isOpen ? (
+                                <FontAwesomeIcon icon={faEllipsisH as IconProp} className="font-icon" />
                             ) : (
-                                <FontAwesomeIcon icon={faMinus} style={{ fontSize: '40px' }} />
+                                <FontAwesomeIcon icon={faMinus as IconProp} style={{ fontSize: '40px' }} />
                             )}
                         </button>
                     </div>

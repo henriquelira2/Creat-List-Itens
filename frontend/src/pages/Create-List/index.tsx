@@ -111,7 +111,7 @@ function CreateList() {
     formData.append('file', pdfData, 'lista_de_produtos.pdf');
 
     // Enviar o PDF para o backend
-    await fetch('http://localhost:3001/upload', {
+    await fetch('https://creat-list-itens.onrender.com/upload', {
       method: 'POST',
       body: formData
     }).then(response => {

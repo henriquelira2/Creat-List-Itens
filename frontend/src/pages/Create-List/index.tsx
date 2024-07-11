@@ -5,6 +5,9 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import CollapsibleSection from '../../components/CollapsibleSection';
 
+import CircularProgress from '@mui/material/CircularProgress';
+
+
 import jsPDF from 'jspdf';
 
 
@@ -44,6 +47,7 @@ const sections = [
 ];
 
 function CreateList() {
+  const [loading, setLoading] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [checkedItems, setCheckedItems] = useState<{ id: string, label: string }[]>([]);
 
@@ -60,8 +64,11 @@ function CreateList() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    setLoading(true);
     e.preventDefault();
-
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
     // Gerar PDF
     const doc = new jsPDF();
 
@@ -103,7 +110,9 @@ function CreateList() {
         yOffset += (selectedItems.length + 1) * cellHeight + 5;
         yOffset += 10;
       }
+
     });
+
     doc.save('lista_de_produtos.pdf');
     const pdfData = doc.output('blob');
 
@@ -121,6 +130,7 @@ function CreateList() {
         console.error('Erro ao enviar o PDF');
       }
     });
+
   };
 
   return (
@@ -138,7 +148,9 @@ function CreateList() {
             onCheckboxChange={handleCheckboxChange}
           />
         ))}
-        <button type="submit">Salvar Lista</button>
+        <button className='btn-salvar' type="submit" disabled={loading}>
+          {loading ? <CircularProgress size={20} /> : 'SALVAR'}
+        </button>
       </form>
       <Footer />
     </>

@@ -1,30 +1,25 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable no-undef */
+require("dotenv").config();
+
 const express = require("express");
-const cors = require("cors");
 const multer = require("multer");
 const mysql = require("mysql2");
 const fs = require("fs");
 const moment = require("moment-timezone");
-const path = require("path");
 
-require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.use(
-  cors({
-    origin: "http://localhost:5173", //
-  })
-);
-
+// Configurar o Multer para salvar o PDF em uma pasta temporária
 const upload = multer({ dest: "uploads/" });
 
+// Configurar o banco de dados MySQL
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  connectTimeout: 10000,
-  acquireTimeout: 10000,
   timezone: "Z",
 });
 
@@ -90,10 +85,10 @@ app.get("/pdf_files/:id/download", (req, res) => {
   });
 });
 
-app.listen(port, () => {
+app.listen(process.env.PORT || 8080, function () {
   console.log(
     "Express server listening on port %d in %s mode",
-    port,
+    this.address().port,
     app.settings.env
   );
 });

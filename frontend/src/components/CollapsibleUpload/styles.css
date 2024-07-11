@@ -1,0 +1,36 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: right;
+  border-radius: 5px;
+}
+
+.btn-collaps {
+  background-color: transparent;
+  border: none;
+}
+
+.collaps-icon {
+  display: flex;
+  justify-content: right;
+  margin: 10px 10px 0px 0px;
+  z-index: 1;
+  position: relative;
+}
+
+.collaps-text {
+  display: flex;
+  justify-content: right;
+  margin: 0px 10px 0px 0px;
+  position: relative;
+  z-index: 1;
+}
+
+.collaps-upload {
+  width: 100px;
+  padding: 5px;
+}
+
+.font-icon {
+  font-size: 30px;
+}

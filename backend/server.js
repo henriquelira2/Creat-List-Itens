@@ -23,8 +23,6 @@ const db = mysql.createConnection({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  connectTimeout: 10000,
-  acquireTimeout: 10000,
   timezone: "Z",
 });
 
@@ -81,11 +79,8 @@ app.get("/pdf_files/:id/download", (req, res) => {
     }
 
     const file = results[0];
-    res.setHeader(
-      "Disposição de conteúdo",
-      `anexo; nome do arquivo=${file.filename}`
-    );
-    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader('Content-Disposition', `attachment; filename=${file.filename}`);
+    res.setHeader('Content-Type', 'application/pdf');
     res.send(file.data);
   });
 });

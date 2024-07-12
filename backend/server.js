@@ -10,9 +10,22 @@ require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 3001;
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://creat-list-itens-q1v5.vercel.app",
+];
+
 app.use(
   cors({
-    origin: "https://creat-list-itens-q1v5.vercel.app", 
+    origin: (origin, callback) => {
+      // Permitir solicitações sem origem (como de ferramentas de teste)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    }
   })
 );
 

@@ -5,8 +5,9 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
 
-import ImagenMiddle from "../../assets/click2.png";
+import ImagenMiddle from "../../assets/click1.png";
 import ImagenLeft from "../../assets/image_processin2.png";
+import ImagenRight from "../../assets/storege2.png";
 
 function Home() {
     const navigate = useNavigate();
@@ -25,7 +26,9 @@ function Home() {
                     <button className='btn-novalista' onClick={() => navigate("/Nova-Lista")}>Nova Lista</button>
                 </div>
 
-                <div className='box right'></div>
+                <div className='box right'>
+                    <img className="img-storege" src={ImagenRight} alt="" />
+                </div>
             </div>
             <Footer />
         </>

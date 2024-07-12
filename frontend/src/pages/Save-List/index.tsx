@@ -28,11 +28,10 @@ const SaveList: React.FC = () => {
             try {
                 const response = await axios.get('https://creat-list-itens.onrender.com/pdf_files');
                 if (Array.isArray(response.data)) {
-                    setPdfFiles(response.data);
-                    setTimeout(() => {
-                        setIsLoading(false); // Finalizou o carregamento
-                    }, 5000);
-
+                    // Ordenar os dados pelo ID de forma decrescente
+                    const sortedData = response.data.sort((a: PdfFile, b: PdfFile) => b.id - a.id);
+                    setPdfFiles(sortedData);
+                    setIsLoading(false); // Finalizou o carregamento
                 } else {
                     setError('Formato de resposta inesperado');
                     console.error('Unexpected response format:', response.data);
@@ -89,7 +88,6 @@ const SaveList: React.FC = () => {
                     {pdfFiles.map(file => (
                         <div className="box-item" key={file.id}>
                             <Collapsible title="Download">
-
                                 <button style={{ width: '100%', height: '100%', zIndex: '1', padding: '5px' }} className='btn-collaps' onClick={() => handleDownload(file.id)}>
                                     {loading ? <CircularProgress size={20} /> : 'Baixar'}
                                 </button>

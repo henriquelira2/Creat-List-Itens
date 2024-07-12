@@ -70,7 +70,7 @@ app.post("/upload", upload.single("file"), (req, res) => {
 });
 
 app.get("/pdf_files", (req, res) => {
-  const query = "SELECT id, filename, uploaded_at FROM pdf_files";
+  const query = "SELECT id, filename, uploaded_at FROM pdf_files ";
   db.query(query, (err, results) => {
     if (err) throw err;
     res.json(results);

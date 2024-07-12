@@ -1,5 +1,5 @@
 import "./styles.css";
-import logo from "../../assets/logo3.png"
+import logo from "../../assets/logo.png"
 
 const Header = () => {
 
@@ -13,7 +13,6 @@ const Header = () => {
 
         <div className="header-right">
           <a className="Name" href="/">Home</a>
-          <a className="Name" href="/Teste">Teste</a>
         </div>
       </div>
     </>

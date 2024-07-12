@@ -26,12 +26,12 @@ const SaveList: React.FC = () => {
                 if (Array.isArray(response.data)) {
                     setPdfFiles(response.data);
                 } else {
-                    setError('Unexpected response format');
+                    setError('Formato de resposta inesperado');
                     console.error('Unexpected response format:', response.data);
                 }
             } catch (error) {
-                setError('There was an error fetching the PDF files.');
-                console.error('There was an error fetching the PDF files!', error);
+                setError('Ocorreu um erro ao buscar os arquivos PDF.');
+                console.error('Ocorreu um erro ao buscar os arquivos PDF!', error);
             }
         };
 
@@ -46,13 +46,13 @@ const SaveList: React.FC = () => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', `pdf-file-${id}.pdf`);
+            link.setAttribute('download', `Lista-de-Itens-${id}.pdf`);
             document.body.appendChild(link);
             link.click();
             link.remove();
         } catch (error) {
-            setError('There was an error downloading the PDF file.');
-            console.error('There was an error downloading the PDF file!', error);
+            setError('Ocorreu um erro ao buscar os arquivos PDF.');
+            console.error('Ocorreu um erro ao buscar os arquivos PDF!', error);
         }
     };
 

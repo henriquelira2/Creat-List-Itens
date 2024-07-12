@@ -1,13 +1,10 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable no-undef */
-require("dotenv").config();
-
 const express = require("express");
+const cors = require("cors");
 const multer = require("multer");
 const mysql = require("mysql2");
 const fs = require("fs");
 const moment = require("moment-timezone");
-const cors = require("cors");
+const path = require("path");
 
 require("dotenv").config();
 const app = express();
@@ -15,19 +12,19 @@ const port = process.env.PORT || 3001;
 
 app.use(
   cors({
-    origin: "https://creat-list-itens-q1v5.vercel.app/", //
+    origin: "https://creat-list-itens-q1v5.vercel.app", 
   })
 );
 
-// Configurar o Multer para salvar o PDF em uma pasta temporária
 const upload = multer({ dest: "uploads/" });
 
-// Configurar o banco de dados MySQL
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
+  connectTimeout: 10000,
+  acquireTimeout: 10000,
   timezone: "Z",
 });
 
@@ -55,8 +52,8 @@ app.post("/upload", upload.single("file"), (req, res) => {
       "INSERT INTO pdf_files (filename, data, uploaded_at) VALUES (?, ?, ?)";
     db.query(query, [file.originalname, data, brasiliaTime], (err) => {
       if (err) throw err;
-      console.log("PDF saved to database");
-      res.send("PDF saved to database");
+      console.log("PDF salvo no banco de dados");
+      res.send("PDF salvo no banco de dados");
     });
   });
 });
@@ -75,28 +72,28 @@ app.get("/pdf_files/:id/download", (req, res) => {
   const query = "SELECT filename, data FROM pdf_files WHERE id = ?";
   db.query(query, [id], (err, results) => {
     if (err) {
-      console.error("Error fetching PDF file:", err);
-      return res.status(500).send("Error fetching PDF file");
+      console.error("Erro ao buscar arquivo PDF:", err);
+      return res.status(500).send("Erro ao buscar arquivo PDF");
     }
 
     if (results.length === 0) {
-      return res.status(404).send("File not found");
+      return res.status(404).send("Arquivo não encontrado");
     }
 
     const file = results[0];
     res.setHeader(
-      "Content-Disposition",
-      `attachment; filename=${file.filename}`
+      "Disposição de conteúdo",
+      `anexo; nome do arquivo=${file.filename}`
     );
     res.setHeader("Content-Type", "application/pdf");
     res.send(file.data);
   });
 });
 
-app.listen(process.env.PORT || 8080, function () {
+app.listen(port, () => {
   console.log(
     "Express server listening on port %d in %s mode",
-    this.address().port,
+    port,
     app.settings.env
   );
 });

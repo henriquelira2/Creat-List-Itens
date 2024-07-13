@@ -13,6 +13,7 @@ function Home() {
     const navigate = useNavigate();
     return (
         <>
+        
             <Header />
             <div className='Container'>
 

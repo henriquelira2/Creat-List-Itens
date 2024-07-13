@@ -52,7 +52,7 @@ function NewItem() {
 
     return (
         <>
-            <div className='background-top'>
+            <div className='background-top' style={{backgroundColor:'#90DFE6'}}>
                 <div className='title-marca'>Adicione um nova item na lista</div>
             </div>
 
@@ -84,7 +84,7 @@ function NewItem() {
                     value={newItem}
                     onChange={(e) => setNewItem(e.target.value)}
                 />
-                <button className='buttom-salvar' type="submit">  {loading ? <CircularProgress size={20} /> : 'Salvar'}</button>
+                <button style={{backgroundColor:'#90DFE6'}} className='buttom-salvar' type="submit">  {loading ? <CircularProgress size={20} /> : 'Salvar'}</button>
                 {message && <div className='message'>{message}</div>}
             </form>
         </>

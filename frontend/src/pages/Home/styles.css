@@ -11,6 +11,7 @@ body {
   overflow: auto;
   scroll-behavior: smooth;
   background-size: cover;
+  background-repeat: no-repeat;
 }
 
 body::-webkit-scrollbar {
@@ -51,7 +52,7 @@ body::-webkit-scrollbar {
   position: relative;
   transform: translateY(20px) translateZ(-20px);
   box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.2);
-  background-color: #FDDED9;
+  background-color: #fdded9;
 }
 
 .box.middle {
@@ -73,7 +74,6 @@ body::-webkit-scrollbar {
   transform: translateY(20px) translateZ(-20px);
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
   background-color: #90dfe6;
-  
 }
 
 .img-novalista {
@@ -91,7 +91,7 @@ body::-webkit-scrollbar {
   height: 100%;
 }
 
-.img-storege{
+.img-storege {
   display: flex;
   position: absolute;
   width: 100%;
@@ -131,7 +131,7 @@ body::-webkit-scrollbar {
 }
 
 @media screen and (max-width: 890px) {
-  body{
+  body {
     background-image: url('../../assets/background2.jpg');
   }
 

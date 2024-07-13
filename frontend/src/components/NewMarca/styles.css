@@ -77,7 +77,7 @@
 }
 
 .buttom-salvar:hover {
-  background-color: #ffffff;
+  background-color: #ffffff !important;
 }
 
 .message {

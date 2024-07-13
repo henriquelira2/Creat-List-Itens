@@ -34,7 +34,7 @@ function NewMarca() {
 
     return (
         <>
-            <div className='background-top'>
+            <div className='background-top' style={{ backgroundColor: '#FDDED9' }}>
                 <div className='title-marca'>Adicione uma nova marca</div>
             </div>
 
@@ -49,7 +49,7 @@ function NewMarca() {
                     value={marca}
                     onChange={(e) => setMarca(e.target.value)}
                 />
-                <button className='buttom-salvar' type="submit">  {loading ? <CircularProgress size={20} /> : 'Salvar'}</button>
+                <button style={{ backgroundColor: '#FDDED9' }} className='buttom-salvar' type="submit">  {loading ? <CircularProgress size={20} /> : 'Salvar'}</button>
                 {message && <div className='message'>{message}</div>}
             </form>
         </>

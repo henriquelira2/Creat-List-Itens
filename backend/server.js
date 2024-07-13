@@ -12,6 +12,7 @@ const port = process.env.PORT || 3001;
 
 const allowedOrigins = [
   "http://localhost:5173",
+  "https://creat-list-itens-q1v5-qw89m9trj-gareky1s-projects.vercel.app",
   "https://creat-list-itens-q1v5.vercel.app",
 ];
 
@@ -70,7 +71,7 @@ app.post("/upload", upload.single("file"), (req, res) => {
 });
 
 app.get("/pdf_files", (req, res) => {
-  const query = "SELECT id, filename, uploaded_at FROM pdf_files ";
+  const query = "SELECT id, filename, uploaded_at FROM pdf_files          ";
   db.query(query, (err, results) => {
     if (err) throw err;
     res.json(results);

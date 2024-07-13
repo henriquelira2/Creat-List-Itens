@@ -7,7 +7,7 @@ import Footer from "../../components/Footer";
 
 import ImagenMiddle from "../../assets/click1.png";
 import ImagenLeft from "../../assets/image_processin2.png";
-import ImagenRight from "../../assets/storege2.png";
+import ImagenRight from "../../assets/image_processin5.png";
 
 function Home() {
     const navigate = useNavigate();
@@ -27,6 +27,7 @@ function Home() {
                 </div>
 
                 <div className='box right'>
+                    <button className='btn-lista' onClick={() => navigate("/Novos-Produtos")} style={{fontSize:'20px'}}>Novos Produtos</button>
                     <img className="img-storege" src={ImagenRight} alt="" />
                 </div>
             </div>

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useState, useEffect } from 'react';
 import "./styles.css";
 
 import Header from "../../components/Header";
@@ -7,49 +8,43 @@ import CollapsibleSection from '../../components/CollapsibleSection';
 
 import CircularProgress from '@mui/material/CircularProgress';
 
-
 import jsPDF from 'jspdf';
-
-
-const sections = [
-  {
-    index: 1,
-    title: "PRODUTOS YPE",
-    items: [
-      { id: "ype1", label: "AMACIANTE YPE ACONCHEGO 2LT" },
-      { id: "ype2", label: "AGUA SANITARIA YPE PRO 1L" }
-    ]
-  },
-  {
-    index: 2,
-    title: "PRODUTOS URCA",
-    items: [
-      { id: "urca1", label: "AMACIANTE URCA BRISA DA PRIMAVERA LEVE 2L PAG" },
-      { id: "urca2", label: "AMACIANTE URCA BRISA DA PRIMAVERA LEVE 2L PAG" },
-      { id: "urca3", label: "AMACIANTE URCA " }
-    ]
-  },
-  {
-    index: 3,
-    title: "PRODUTOS MONANGE",
-    items: [
-      { id: "monange1", label: "COND MONANGE 325ML RESTAURA Q EU GOSTO 325ML" }
-    ]
-  },
-
-  {
-    index: 5,
-    title: "PRODUTOS ELSEVE",
-    items: [
-      { id: "elseve1", label: "COND CAB LISOS 200ML ELSEVE" }
-    ]
-  },
-];
 
 function CreateList() {
   const [loading, setLoading] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [checkedItems, setCheckedItems] = useState<{ id: string, label: string }[]>([]);
+  const [sections, setSections] = useState<{ index: number, title: string, items: { id: string, label: string }[] }[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch('https://creat-list-itens.onrender.com/products');
+        const data = await response.json();
+
+        const formattedSections = data.map((product: any, index: number) => ({
+          index: index + 1,
+          title: product.marca,
+          items: product.items.map((item: string, itemIndex: number) => ({
+            id: `${product.marca}-${itemIndex}`,
+            label: item
+          }))
+        }));
+
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1000);
+
+        setSections(formattedSections);
+      } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const handleToggle = (index: number) => {
     setActiveIndex(activeIndex === index ? null : index);
@@ -69,36 +64,29 @@ function CreateList() {
     setTimeout(() => {
       setLoading(false);
     }, 5000);
+
     // Gerar PDF
     const doc = new jsPDF();
-
     let yOffset = 10;
 
     sections.forEach(section => {
       const { title, items } = section;
 
-      // Verifica se há itens marcados nesta seção
       const selectedItems = checkedItems.filter(item => items.some(i => i.id === item.id));
 
-      // Se houver itens marcados, adicionar ao PDF
       if (selectedItems.length > 0) {
-
         doc.setDrawColor(0);
         doc.setLineWidth(0.2);
 
-        // Definindo os limites da tabela
         const startX = 10;
         const startY = yOffset;
         const cellWidth = 180;
         const cellHeight = 8;
 
         doc.rect(startX, startY, cellWidth, cellHeight);
-
-        // Títulos das colunas (usando o título da seção)
         doc.setFont('helvetica', 'bold');
         doc.text(title, startX + 2, startY + 5);
 
-        // Itens da lista
         doc.setFont('helvetica', 'normal');
         selectedItems.forEach((item, index) => {
           const textX = startX + 2;
@@ -110,7 +98,6 @@ function CreateList() {
         yOffset += (selectedItems.length + 1) * cellHeight + 5;
         yOffset += 10;
       }
-
     });
 
     doc.save('lista_de_produtos.pdf');
@@ -119,7 +106,6 @@ function CreateList() {
     const formData = new FormData();
     formData.append('file', pdfData, 'lista_de_produtos.pdf');
 
-    // Enviar o PDF para o backend
     await fetch('https://creat-list-itens.onrender.com/upload', {
       method: 'POST',
       body: formData
@@ -130,9 +116,19 @@ function CreateList() {
         console.error('Erro ao enviar o PDF');
       }
     });
-
   };
 
+  if (isLoading) {
+    return (
+      <>
+        <Header />
+        <form className='box-create-list' onSubmit={handleSubmit}>
+          <div className="loading" style={{ height: '100vh' }}><CircularProgress size={50} /></div>
+        </form>
+        <Footer />
+      </>
+    );
+  }
   return (
     <>
       <Header />

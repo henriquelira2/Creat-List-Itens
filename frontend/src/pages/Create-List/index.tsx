@@ -1,13 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import "./styles.css";
-
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import CollapsibleSection from '../../components/CollapsibleSection';
-
 import CircularProgress from '@mui/material/CircularProgress';
-
 import jsPDF from 'jspdf';
 
 function CreateList() {
@@ -17,32 +14,32 @@ function CreateList() {
   const [checkedItems, setCheckedItems] = useState<{ id: string, label: string }[]>([]);
   const [sections, setSections] = useState<{ index: number, title: string, items: { id: string, label: string }[] }[]>([]);
 
+  const fetchProducts = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('https://creat-list-itens.onrender.com/products');
+      const data = await response.json();
+
+      const formattedSections = data.map((product: any, index: number) => ({
+        index: index + 1,
+        title: product.marca,
+        items: product.items.map((item: string, itemIndex: number) => ({
+          id: `${product.marca}-${itemIndex}`,
+          label: item
+        }))
+      }));
+
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+
+      setSections(formattedSections);
+    } catch (error) {
+      console.error('Erro ao buscar produtos:', error);
+    }
+  };
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch('https://creat-list-itens.onrender.com/products');
-        const data = await response.json();
-
-        const formattedSections = data.map((product: any, index: number) => ({
-          index: index + 1,
-          title: product.marca,
-          items: product.items.map((item: string, itemIndex: number) => ({
-            id: `${product.marca}-${itemIndex}`,
-            label: item
-          }))
-        }));
-
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 1000);
-
-        setSections(formattedSections);
-      } catch (error) {
-        console.error('Erro ao buscar produtos:', error);
-      }
-    };
-
     fetchProducts();
   }, []);
 
@@ -56,6 +53,57 @@ function CreateList() {
         ? prev.filter(checkedItem => checkedItem.id !== item.id)
         : [...prev, item]
     );
+  };
+
+  const handleDeleteSection = async (index: number, title: string) => {
+    const confirmDelete = window.confirm(`Você tem certeza que deseja deletar a marca ${title} e todos os seus itens?`);
+    if (confirmDelete) {
+      try {
+        const response = await fetch('https://creat-list-itens.onrender.com/delete-marca', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ marca: title })
+        });
+
+        if (response.ok) {
+          console.log('Marca deletada com sucesso');
+          fetchProducts(); // Recarrega a lista de produtos
+        } else {
+          console.error('Erro ao deletar a marca');
+        }
+      } catch (error) {
+        console.error('Erro ao deletar a marca:', error);
+      }
+    }
+  };
+
+  const handleDeleteItem = async (item: { id: string, label: string }, title: string) => {
+    const confirmDelete = window.confirm(`Você tem certeza que deseja deletar o item ${item.label} da marca ${title}?`);
+    if (confirmDelete) {
+      try {
+        const response = await fetch('https://creat-list-itens.onrender.com/delete-item', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ marca: title, item: item.label })
+        });
+
+        if (response.ok) {
+          setSections(sections.map(section => ({
+            ...section,
+            items: section.items.filter(i => i.id !== item.id),
+          })));
+          console.log('Item deletado com sucesso');
+        } else {
+          console.error('Erro ao deletar o item');
+        }
+      } catch (error) {
+        console.error('Erro ao deletar o item:', error);
+      }
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -142,6 +190,8 @@ function CreateList() {
             title={section.title}
             items={section.items}
             onCheckboxChange={handleCheckboxChange}
+            onDeleteSection={handleDeleteSection}
+            onDeleteItem={handleDeleteItem}
           />
         ))}
         <button className='btn-salvar' type="submit" disabled={loading}>

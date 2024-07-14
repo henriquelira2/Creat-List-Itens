@@ -193,6 +193,50 @@ app.get("/products", (req, res) => {
   });
 });
 
+app.delete("/delete-item", (req, res) => {
+  const { marca, item } = req.body;
+
+  const checkQuery = "SELECT item FROM products WHERE marca = ?";
+  db.query(checkQuery, [marca], (err, results) => {
+    if (err) {
+      console.error("Erro ao verificar a marca:", err);
+      return res.status(500).json({ message: "Erro ao verificar a marca" });
+    }
+
+    if (results.length === 0) {
+      return res.status(400).json({ message: "A marca não existe no banco de dados" });
+    }
+
+    let items = results[0].item ? results[0].item.split(',') : [];
+    items = items.filter(i => i !== item);
+    const newItems = items.join(',');
+
+    const updateQuery = "UPDATE products SET item = ? WHERE marca = ?";
+    db.query(updateQuery, [newItems, marca], (err) => {
+      if (err) {
+        console.error("Erro ao atualizar o item:", err);
+        return res.status(500).json({ message: "Erro ao atualizar o item" });
+      }
+
+      res.json({ message: "Item deletado com sucesso" });
+    });
+  });
+});
+
+app.delete("/delete-marca", (req, res) => {
+  const { marca } = req.body;
+
+  const deleteQuery = "DELETE FROM products WHERE marca = ?";
+  db.query(deleteQuery, [marca], (err) => {
+    if (err) {
+      console.error("Erro ao deletar a marca:", err);
+      return res.status(500).json({ message: "Erro ao deletar a marca" });
+    }
+
+    res.json({ message: "Marca e itens deletados com sucesso" });
+  });
+});
+
 
 app.listen(port, () => {
   console.log(

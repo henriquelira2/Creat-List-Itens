@@ -49,6 +49,17 @@ function NewItem() {
         }
     };
 
+    const handleKeyPress = (event: React.KeyboardEvent) => {
+        if (event.key === ',') {
+            event.preventDefault();
+        }
+    };
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value.replace(/,/g, '');
+        setNewItem(value);
+    };
+
     return (
         <>
             <div className='background-top' style={{backgroundColor:'#90DFE6'}}>
@@ -81,7 +92,8 @@ function NewItem() {
                     placeholder='EX: AMACIANTE YPE ACONCHEGO 2LT' 
                     required 
                     value={newItem}
-                    onChange={(e) => setNewItem(e.target.value)}
+                    onChange={handleChange}
+                    onKeyPress={handleKeyPress}
                 />
                 <button style={{backgroundColor:'#90DFE6'}} className='buttom-salvar' type="submit">  {loading ? <CircularProgress size={20} /> : 'Salvar'}</button>
             </form>

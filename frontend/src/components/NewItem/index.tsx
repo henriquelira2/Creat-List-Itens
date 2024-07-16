@@ -10,7 +10,6 @@ function NewItem() {
     const [marcas, setMarcas] = useState<Marca[]>([]);
     const [selectedMarca, setSelectedMarca] = useState<string>('');
     const [newItem, setNewItem] = useState<string>('');
-    const [message, setMessage] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -41,10 +40,10 @@ function NewItem() {
             });
 
             const result = await response.json();
-            setMessage(result.message);
+            alert(result.message);
         } catch (error) {
             console.error('Erro ao adicionar item:', error);
-            setMessage('Erro ao adicionar item');
+            alert('Erro ao adicionar item');
         } finally {
             setLoading(false);
         }
@@ -85,7 +84,6 @@ function NewItem() {
                     onChange={(e) => setNewItem(e.target.value)}
                 />
                 <button style={{backgroundColor:'#90DFE6'}} className='buttom-salvar' type="submit">  {loading ? <CircularProgress size={20} /> : 'Salvar'}</button>
-                {message && <div className='message'>{message}</div>}
             </form>
         </>
     );

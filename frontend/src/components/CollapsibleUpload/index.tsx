@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faEllipsisH, faMinus } from "@fortawesome/free-solid-svg-icons";
 
-
 interface IProps {
     open?: boolean;
     title: string;
@@ -26,7 +25,7 @@ const Collapsible: React.FC<IProps> = ({ open, children }) => {
                 <div>
                     <div className="p-3 border-bottom d-flex justify-content-between collaps-icon">
                         <button type="button" className="btn-collaps" onClick={handleFilterOpening}>
-                        {!isOpen ? (
+                            {!isOpen ? (
                                 <FontAwesomeIcon icon={faEllipsisH as IconProp} className="font-icon" />
                             ) : (
                                 <FontAwesomeIcon icon={faMinus as IconProp} style={{ fontSize: '40px' }} />
@@ -34,9 +33,12 @@ const Collapsible: React.FC<IProps> = ({ open, children }) => {
                         </button>
                     </div>
                 </div>
-
                 <div className="border-bottom collaps-text">
-                    <button className="">{isOpen && <div className="p-3 collaps-upload">{children}</div>}</button>
+                    {isOpen && (
+                        <div className="p-3 collaps-upload">
+                            {children}
+                        </div>
+                    )}
                 </div>
             </div>
         </>

@@ -74,3 +74,30 @@
   color: slategrey;
   font-weight: 700;
 }
+
+.btn-upload{
+  background-color:gray   ;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.btn-delete {
+  background-color:gray ;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.btn-delete:hover {
+  background-color: red !important;
+}
+.btn-upload:hover {
+  background-color: blue !important;
+}
+

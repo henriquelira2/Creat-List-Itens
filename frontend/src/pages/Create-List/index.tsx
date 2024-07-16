@@ -13,11 +13,16 @@ function CreateList() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [checkedItems, setCheckedItems] = useState<{ id: string, label: string }[]>([]);
   const [sections, setSections] = useState<{ index: number, title: string, items: { id: string, label: string }[] }[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchLoading, setSearchLoading] = useState<boolean>(false);
 
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
       const response = await fetch('https://creat-list-itens.onrender.com/products');
+      if (!response.ok) {
+        throw new Error('Erro ao buscar produtos');
+      }
       const data = await response.json();
 
       const formattedSections = data.map((product: any, index: number) => ({
@@ -29,13 +34,11 @@ function CreateList() {
         }))
       }));
 
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
-
+      setIsLoading(false);
       setSections(formattedSections);
     } catch (error) {
       console.error('Erro ao buscar produtos:', error);
+      setIsLoading(false);
     }
   };
 
@@ -67,12 +70,12 @@ function CreateList() {
           body: JSON.stringify({ marca: title })
         });
 
-        if (response.ok) {
-          console.log('Marca deletada com sucesso');
-          fetchProducts(); // Recarrega a lista de produtos
-        } else {
-          console.error('Erro ao deletar a marca');
+        if (!response.ok) {
+          throw new Error('Erro ao deletar a marca');
         }
+
+        console.log('Marca deletada com sucesso');
+        fetchProducts(); // Recarrega a lista de produtos
       } catch (error) {
         console.error('Erro ao deletar a marca:', error);
       }
@@ -91,15 +94,15 @@ function CreateList() {
           body: JSON.stringify({ marca: title, item: item.label })
         });
 
-        if (response.ok) {
-          setSections(sections.map(section => ({
-            ...section,
-            items: section.items.filter(i => i.id !== item.id),
-          })));
-          console.log('Item deletado com sucesso');
-        } else {
-          console.error('Erro ao deletar o item');
+        if (!response.ok) {
+          throw new Error('Erro ao deletar o item');
         }
+
+        setSections(sections.map(section => ({
+          ...section,
+          items: section.items.filter(i => i.id !== item.id),
+        })));
+        console.log('Item deletado com sucesso');
       } catch (error) {
         console.error('Erro ao deletar o item:', error);
       }
@@ -107,11 +110,8 @@ function CreateList() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    setLoading(true);
     e.preventDefault();
-    setTimeout(() => {
-      setLoading(false);
-    }, 5000);
+    setLoading(true);
 
     // Gerar PDF
     const doc = new jsPDF();
@@ -154,16 +154,50 @@ function CreateList() {
     const formData = new FormData();
     formData.append('file', pdfData, 'lista_de_produtos.pdf');
 
-    await fetch('https://creat-list-itens.onrender.com/upload', {
-      method: 'POST',
-      body: formData
-    }).then(response => {
-      if (response.ok) {
-        console.log('PDF enviado com sucesso');
-      } else {
-        console.error('Erro ao enviar o PDF');
+    try {
+      const response = await fetch('https://creat-list-itens.onrender.com/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao enviar o PDF');
       }
-    });
+
+      console.log('PDF enviado com sucesso');
+    } catch (error) {
+      console.error('Erro ao enviar o PDF:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSearchLoading(true);
+
+    try {
+      const response = await fetch(`https://creat-list-itens.onrender.com/search?query=${encodeURIComponent(searchQuery)}`);
+      if (!response.ok) {
+        throw new Error('Erro ao buscar produtos');
+      }
+      const data = await response.json();
+
+      const formattedSections = data.map((product: any, index: number) => ({
+        index: index + 1,
+        title: product.marca,
+        items: product.items.map((item: string, itemIndex: number) => ({
+          id: `${product.marca}-${itemIndex}`,
+          label: item
+        }))
+      }));
+
+      setSections(formattedSections);
+    } catch (error) {
+      console.error('Erro ao buscar produtos:', error);
+    } finally {
+      setSearchLoading(false);
+    }
   };
 
   if (isLoading) {
@@ -177,9 +211,22 @@ function CreateList() {
       </>
     );
   }
+
   return (
     <>
       <Header />
+      <div className="search-box">
+        <input
+          type="text"
+          className="input-text-search"
+          placeholder="Buscar marca"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <button className="btn-search" onClick={handleSearch} disabled={searchLoading}>
+          {searchLoading ? <CircularProgress size={20} /> : 'Buscar'}
+        </button>
+      </div>
       <form className='box-create-list' onSubmit={handleSubmit}>
         {sections.map(section => (
           <CollapsibleSection

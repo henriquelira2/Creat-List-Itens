@@ -68,6 +68,24 @@ app.post("/upload", upload.single("file"), (req, res) => {
   });
 });
 
+app.delete("/pdf_files/:id", (req, res) => {
+  const { id } = req.params;
+
+  const query = "DELETE FROM pdf_files WHERE id = ?";
+  db.query(query, [id], (err, results) => {
+    if (err) {
+      console.error("Erro ao deletar arquivo PDF:", err);
+      return res.status(500).json({ message: "Erro ao deletar arquivo PDF" });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ message: "Arquivo não encontrado" });
+    }
+
+    res.json({ message: "Arquivo PDF deletado com sucesso" });
+  });
+});
+
 app.get("/pdf_files", (req, res) => {
   const query = "SELECT id, filename, uploaded_at FROM pdf_files";
   db.query(query, (err, results) => {
@@ -153,16 +171,20 @@ app.post("/add-item", (req, res) => {
     }
 
     if (results.length === 0) {
-      return res.status(400).json({ message: "A marca não existe no banco de dados" });
+      return res
+        .status(400)
+        .json({ message: "A marca não existe no banco de dados" });
     }
 
-    let items = results[0].item ? results[0].item.split(',') : [];
+    let items = results[0].item ? results[0].item.split(",") : [];
     if (items.includes(item)) {
-      return res.status(400).json({ message: "O item já existe para essa marca" });
+      return res
+        .status(400)
+        .json({ message: "O item já existe para essa marca" });
     }
 
     items.push(item);
-    const newItems = items.join(',');
+    const newItems = items.join(",");
 
     const updateQuery = "UPDATE products SET item = ? WHERE marca = ?";
     db.query(updateQuery, [newItems, marca], (err) => {
@@ -184,9 +206,9 @@ app.get("/products", (req, res) => {
       return res.status(500).json({ message: "Erro ao buscar produtos" });
     }
 
-    const products = results.map(result => ({
+    const products = results.map((result) => ({
       marca: result.marca,
-      items: result.item ? result.item.split(',') : []
+      items: result.item ? result.item.split(",") : [],
     }));
 
     res.json(products);
@@ -204,12 +226,14 @@ app.delete("/delete-item", (req, res) => {
     }
 
     if (results.length === 0) {
-      return res.status(400).json({ message: "A marca não existe no banco de dados" });
+      return res
+        .status(400)
+        .json({ message: "A marca não existe no banco de dados" });
     }
 
-    let items = results[0].item ? results[0].item.split(',') : [];
-    items = items.filter(i => i !== item);
-    const newItems = items.join(',');
+    let items = results[0].item ? results[0].item.split(",") : [];
+    items = items.filter((i) => i !== item);
+    const newItems = items.join(",");
 
     const updateQuery = "UPDATE products SET item = ? WHERE marca = ?";
     db.query(updateQuery, [newItems, marca], (err) => {
@@ -237,6 +261,31 @@ app.delete("/delete-marca", (req, res) => {
   });
 });
 
+// Adicionando a rota de busca
+app.get("/search", (req, res) => {
+  const searchQuery = req.query.query;
+
+  const query = `
+    SELECT marca, item
+    FROM products
+    WHERE marca LIKE ? OR item LIKE ?
+  `;
+  const formattedQuery = `%${searchQuery}%`;
+
+  db.query(query, [formattedQuery, formattedQuery], (err, results) => {
+    if (err) {
+      console.error("Erro ao buscar produtos:", err);
+      return res.status(500).json({ message: "Erro ao buscar produtos" });
+    }
+
+    const products = results.map((result) => ({
+      marca: result.marca,
+      items: result.item ? result.item.split(",") : [],
+    }));
+
+    res.json(products);
+  });
+});
 
 app.listen(port, () => {
   console.log(

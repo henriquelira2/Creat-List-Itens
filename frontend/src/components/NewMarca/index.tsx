@@ -4,7 +4,6 @@ import { CircularProgress } from '@mui/material';
 
 function NewMarca() {
     const [marca, setMarca] = useState('');
-    const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: { preventDefault: () => void; }) => {
@@ -25,10 +24,10 @@ function NewMarca() {
                 setLoading(false);
             }, 1000);
 
-            setMessage(data.message);
+            alert(data.message);
         } catch (error) {
             console.error('Erro ao adicionar marca:', error);
-            setMessage('Erro ao adicionar marca');
+            alert('Erro ao adicionar marca');
         }
     };
 
@@ -50,7 +49,6 @@ function NewMarca() {
                     onChange={(e) => setMarca(e.target.value)}
                 />
                 <button style={{ backgroundColor: '#FDDED9' }} className='buttom-salvar' type="submit">  {loading ? <CircularProgress size={20} /> : 'Salvar'}</button>
-                {message && <div className='message'>{message}</div>}
             </form>
         </>
     );

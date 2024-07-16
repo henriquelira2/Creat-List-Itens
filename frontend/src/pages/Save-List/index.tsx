@@ -21,6 +21,7 @@ const SaveList: React.FC = () => {
     const [pdfFiles, setPdfFiles] = useState<PdfFile[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [loadingD, setLoadingD] = useState(false);
     const [isLoading, setIsLoading] = useState<boolean>(true); // Estado de carregamento
 
     useEffect(() => {
@@ -67,6 +68,24 @@ const SaveList: React.FC = () => {
         }
     };
 
+    const handleDelete = async (id: number) => {
+        setLoadingD(true);
+        try {
+            const response = await axios.delete(`https://creat-list-itens.onrender.com/pdf_files/${id}`);
+            if (response.status === 200) {
+                setPdfFiles((prevFiles) => prevFiles.filter((file) => file.id !== id));
+                alert('Arquivo PDF deletado com sucesso');
+            } else {
+                alert('Erro ao deletar arquivo PDF');
+            }
+        } catch (error) {
+            console.error('Erro ao deletar arquivo PDF:', error);
+            alert('Erro ao deletar arquivo PDF');
+        } finally {
+            setLoadingD(false);
+        }
+    };
+
     if (isLoading) {
         return (
             <>
@@ -88,8 +107,19 @@ const SaveList: React.FC = () => {
                     {pdfFiles.map(file => (
                         <div className="box-item" key={file.id}>
                             <Collapsible title="Download">
-                                <button style={{ width: '100%', height: '100%', zIndex: '1', padding: '5px' }} className='btn-collaps' onClick={() => handleDownload(file.id)}>
-                                    {loading ? <CircularProgress size={20} /> : 'Baixar'}
+                                <button
+                                    style={{ backgroundColor: 'gray', color: 'white', width: '100%', padding: '5px' }}
+                                    className='btn-collaps btn-upload'
+                                    onClick={() => handleDownload(file.id)}
+                                >
+                                    {loading ? <CircularProgress size={20} style={{ color: 'white' }} /> : 'Baixar'}
+                                </button>
+                                <button
+                                    style={{ backgroundColor: 'gray', color: 'white', width: '100%', padding: '5px' }}
+                                    className='btn-delete'
+                                    onClick={() => handleDelete(file.id)}
+                                >
+                                    {loadingD ? <CircularProgress size={20} style={{ color: 'white' }} /> : 'Deletar'}
                                 </button>
                             </Collapsible>
                             <div className="box-img-pdf">
@@ -109,6 +139,8 @@ const SaveList: React.FC = () => {
             <Footer />
         </>
     );
+
+
 };
 
 export default SaveList;

@@ -42,7 +42,6 @@
   display: none;
 }
 
-
 .checkbox-item {
   display: flex;
   align-items: center;
@@ -62,7 +61,7 @@
   width: 100%;
   border-radius: 5px;
   border: 1px solid blue;
-  margin-top: 20px;
+  margin-bottom: 20px;
   cursor: pointer;
 }
 
@@ -107,7 +106,6 @@
   color: red;
 }
 
-
 .btn-search {
   padding: 10px;
   background-color: rgb(109, 201, 254);
@@ -122,6 +120,7 @@
   width: 100%;
   align-items: center;
   justify-content: center;
+  margin-bottom: 25px;
 }
 
 .input-text-search {
@@ -146,7 +145,6 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
-
 
 @media screen and (max-width: 820px) {
   .produtos {
@@ -177,8 +175,11 @@
 }
 
 @media screen and (max-width: 480px) {
+  .input-text-search {
+    width: 55%;
+  }
   .checkbox-item {
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
   }
   .checkbox-item label {
